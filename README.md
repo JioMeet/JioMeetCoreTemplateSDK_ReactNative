@@ -134,6 +134,18 @@ The below permission must be added to your main application's `AndroidManifest.x
 ...
 ```
 
+### Hilt dependency in MainApplication
+
+To enable Core SDK Plugin we need to enable Hilt dependency in your Android's MainApplication File. Add this below code in your React Application's android/app/src/main/java/com/'Your Projects name'/MainApplication.java file
+```java
+... other imports
++ import dagger.hilt.android.HiltAndroidApp;
+
++ @HiltAndroidApp
+public class MainApplication extends Application implements ReactApplication {
+... Application's code
+```
+
 ### Build.gradle dependencies required
 
 Add this below line of code to React Native app's Android project's build.gradle file, i.e. your_project/android/build.gradle inside buildscript
