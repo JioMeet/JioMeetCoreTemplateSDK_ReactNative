@@ -109,6 +109,22 @@ To set up Hilt in your flutter project, follow these steps:
 public class MainApplication extends Application implements ReactApplication {
 ... Application's code
 ```
+4. To ensure proper functionality and compatibility of your Android application, please add the following parameters to your `AndroidManifest.xml` file.
+   1. **Open `AndroidManifest.xml`**:
+      - Navigate to the `android/app/src/main` directory of your project.
+      - Open the `AndroidManifest.xml` file.
+
+   2. **Add the Following Attributes to the `<application>` Tag**:
+
+      ```xml
+      <application
+          <!-- Other attributes -->
+          android:supportsRtl="true"
+          android:usesCleartextTraffic="true"
+          android:requestLegacyExternalStorage="true"
+          tools:replace="android:name">
+          <!-- Other attributes and activities -->
+      </application>
 ---
 
 ## Setup
@@ -132,18 +148,19 @@ import { launchMeetingCoreTemplateUI } from '@jiomeet/core_sdk_plugin';
 
 // ...
 
-launchMeetingCoreTemplateUI(meetingId, meetingPin, displayName);
+launchMeetingCoreTemplateUI(meetingId, meetingPin, displayName, initialVideo, initialAudio);
 ```
 
 To join a meeting, enter meeting details in the function and directly call the function as mentioned above
 
-//create a table with meetingId, meetingPin, displayName as columns
 
-| Parameter     | Type     | Description                                                     |
-|:--------------|:---------|:----------------------------------------------------------------|
-| `meetingId`   | `string` | **Required**. The meeting ID of the meeting to be joined.       |
-| `meetingPin`  | `string` | **Required**. The meeting PIN of the meeting to be joined.      |
-| `displayName` | `string` | **Required**. The display name of the user joining the meeting. |
+| Parameter     | Type      | Description                                                     |
+|:--------------|:----------|:----------------------------------------------------------------|
+| `meetingId`   | `string`  | **Required**. The meeting ID of the meeting to be joined.       |
+| `meetingPin`  | `string`  | **Required**. The meeting PIN of the meeting to be joined.      |
+| `displayName` | `string`  | **Required**. The display name of the user joining the meeting. |
+| `initialVideo` | `boolean` | **Optional**. Initial state of Video after joining.             |
+| `initialAudio` | `boolean`  | **Optional**. Initial state of Audio after joining.             |
 
 
 ### Receive a callback from SDK
@@ -153,12 +170,12 @@ import { DeviceEventEmitter } from 'react-native';
 // ...
 
 useEffect(() => {
-  DeviceEventEmitter.addListener('call_ended', (message) => {
-    // Handle the message as needed
-  });
-  return ()=>{
-    DeviceEventEmitter.removeAllListeners('call_ended')
-  }
+   DeviceEventEmitter.addListener('call_ended', (message) => {
+      // Handle the message as needed
+   });
+   return ()=>{
+      DeviceEventEmitter.removeAllListeners('call_ended')
+   }
 }, []);
 ```
 The above callback will be triggered when the Call is ended, you can handle this callback as per your need, the default message that is received is "Call Ended"
@@ -168,107 +185,107 @@ The above callback will be triggered when the Call is ended, you can handle this
 import * as React from 'react';
 
 import {
-  StyleSheet,
-  Button,
-  SafeAreaView,
-  StatusBar,
-  TextInput,
-  useColorScheme,
-  Text,
-  DeviceEventEmitter,
+   StyleSheet,
+   Button,
+   SafeAreaView,
+   StatusBar,
+   TextInput,
+   useColorScheme,
+   Text,
+   DeviceEventEmitter,
 } from 'react-native';
 import {launchMeetingCoreTemplateUI} from '@jiomeet/core_sdk_plugin';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useEffect, useState } from 'react';
 
 export default function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-  const [meetingId, setMeetingId] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [callStatus, setCallStatus] = useState('Not Started');
+   const isDarkMode = useColorScheme() === 'dark';
+   const [meetingId, setMeetingId] = useState('');
+   const [password, setPassword] = useState('');
+   const [name, setName] = useState('');
+   const [callStatus, setCallStatus] = useState('Not Started');
 
-  const backgroundStyle = StyleSheet.create({
-    container: {
-      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-      justifyContent: 'center',
-      alignItems: 'center',
-      flex: 1,
-    },
-  });
+   const backgroundStyle = StyleSheet.create({
+      container: {
+         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+         justifyContent: 'center',
+         alignItems: 'center',
+         flex: 1,
+      },
+   });
 
 
-  useEffect(() => {
-    DeviceEventEmitter.addListener('call_ended', (message) => {
-      console.log('Received message from Kotlin:', message);
-      setCallStatus(message);
-      // Handle the message as needed
-    });
-    return ()=>{
-      DeviceEventEmitter.removeAllListeners('call_ended')
-    }
-  }, []);
-  return (
-    <SafeAreaView style={backgroundStyle.container}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.container.backgroundColor}
-      />
-      <TextInput
-        value={meetingId}
-        onChange={()=>setCallStatus('Not Started')}
-        style={styles.textInput}
-        placeholder={'Meeting ID'}
-        onChangeText={setMeetingId}
-        inputMode={'numeric'}
-      />
-      <TextInput
-        value={password}
-        onChange={()=>setCallStatus('Not Started')}
-        style={styles.textInput}
-        placeholder={'Password'}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        value={name}
-        onChange={()=>setCallStatus('Not Started')}
-        style={styles.textInput}
-        placeholder={'Name Visible'}
-        onChangeText={setName}
-      />
-      <Button
-        disabled={
-          name.length < 3 || meetingId.length < 9 || password.length < 5
-        }
-        title={'Join Call'}
-        onPress={() => {
-          launchMeetingCoreTemplateUI(meetingId, password, name);
-        }}
-      />
-      <Text style={{margin: 16}}>Call status: {callStatus}</Text>
-    </SafeAreaView>
-  );
+   useEffect(() => {
+      DeviceEventEmitter.addListener('call_ended', (message) => {
+         console.log('Received message from Kotlin:', message);
+         setCallStatus(message);
+         // Handle the message as needed
+      });
+      return ()=>{
+         DeviceEventEmitter.removeAllListeners('call_ended')
+      }
+   }, []);
+   return (
+           <SafeAreaView style={backgroundStyle.container}>
+              <StatusBar
+                      barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                      backgroundColor={backgroundStyle.container.backgroundColor}
+              />
+              <TextInput
+                      value={meetingId}
+                      onChange={()=>setCallStatus('Not Started')}
+                      style={styles.textInput}
+                      placeholder={'Meeting ID'}
+                      onChangeText={setMeetingId}
+                      inputMode={'numeric'}
+              />
+              <TextInput
+                      value={password}
+                      onChange={()=>setCallStatus('Not Started')}
+                      style={styles.textInput}
+                      placeholder={'Password'}
+                      onChangeText={setPassword}
+              />
+              <TextInput
+                      value={name}
+                      onChange={()=>setCallStatus('Not Started')}
+                      style={styles.textInput}
+                      placeholder={'Name Visible'}
+                      onChangeText={setName}
+              />
+              <Button
+                      disabled={
+                              name.length < 3 || meetingId.length < 9 || password.length < 5
+                      }
+                      title={'Join Call'}
+                      onPress={() => {
+                         launchMeetingCoreTemplateUI(meetingId, password, name);
+                      }}
+              />
+              <Text style={{margin: 16}}>Call status: {callStatus}</Text>
+           </SafeAreaView>
+   );
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-  textInput: {
-    padding: 16,
-    margin: 16,
-    backgroundColor: '#FCE6E7',
-    borderRadius: 8,
-    alignSelf: 'stretch',
-  },
+   container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+   },
+   box: {
+      width: 60,
+      height: 60,
+      marginVertical: 20,
+   },
+   textInput: {
+      padding: 16,
+      margin: 16,
+      backgroundColor: '#FCE6E7',
+      borderRadius: 8,
+      alignSelf: 'stretch',
+   },
 });
 
 ```
