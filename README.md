@@ -7,6 +7,8 @@
 3. [Prerequisites](#prerequisites)
    - [Install package](#install-the-package)
    - [Hilt](#hilt)
+   - [Android Manifest](#android-manifest-changes-)
+   - [Add credentials](#adding-credentialsproperties-file-in-the-android-folder)
 4. [Setup](#setup)
 5. [Usage](#usage-launch-core-template-screen)
 6. [Example](#example)
@@ -109,7 +111,8 @@ To set up Hilt in your flutter project, follow these steps:
 public class MainApplication extends Application implements ReactApplication {
 ... Application's code
 ```
-4. To ensure proper functionality and compatibility of your Android application, please add the following parameters to your `AndroidManifest.xml` file.
+#### Android Manifest changes 
+To ensure proper functionality and compatibility of your Android application, please add the following parameters to your `AndroidManifest.xml` file.
    1. **Open `AndroidManifest.xml`**:
       - Navigate to the `android/app/src/main` directory of your project.
       - Open the `AndroidManifest.xml` file.
@@ -125,6 +128,20 @@ public class MainApplication extends Application implements ReactApplication {
           tools:replace="android:name">
           <!-- Other attributes and activities -->
       </application>
+      
+#### Adding `credentials.properties` File in the `android` Folder
+
+To securely add your GitHub credentials, follow these steps to create a `credentials.properties` file in your project's `android` folder and update the build configuration accordingly.
+
+##### Create `credentials.properties` File
+
+1. Navigate to the `android` folder in the root of your React Native project.
+2. Create a new file named `credentials.properties`.
+3. Open the `credentials.properties` file and add your GitHub credentials:
+
+   ```properties
+   github.username=your-github-username
+   github.token=your-github-token
 ---
 
 ## Setup
