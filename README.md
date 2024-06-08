@@ -117,9 +117,12 @@ To ensure proper functionality and compatibility of your Android application, pl
       - Navigate to the `android/app/src/main` directory of your project.
       - Open the `AndroidManifest.xml` file.
 
-   2. **Add the Following Attributes to the `<application>` Tag**:
+   2. **Add the Following Attributes to `manifest` and `<application>` Tags**:
 
       ```xml
+      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          <!-- Other attributes -->
+          xmlns:tools="http://schemas.android.com/tools">
       <application
           <!-- Other attributes -->
           android:supportsRtl="true"
@@ -140,8 +143,8 @@ To securely add your GitHub credentials, follow these steps to create a `credent
 3. Open the `credentials.properties` file and add your GitHub credentials:
 
    ```properties
-   github.username=your-github-username
-   github.token=your-github-token
+   github_username=your-github-username
+   github_password=your-github-token-or-password
 ---
 
 ## Setup
