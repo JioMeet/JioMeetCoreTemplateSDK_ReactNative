@@ -217,19 +217,6 @@ Use the [create meeting api](https://dev.jiomeet.com/docs/JioMeet%20Platform%20S
 import { launchMeetingCoreTemplateUI } from '@jiomeet/core_sdk_plugin';
 // ...
          // ...
-        const colorConfig = {
-            primary: '#0062FF', // Primary color
-            primaryDark50: '#0041CC', // Primary Dark 50
-            primary70: '#338BFF', // Primary 70
-        };
-
-        **NOTE: `screenShareConfig` is used to support screen share in iOS app. If screen share is not required we don't need to pass this**
-
-        const screenShareConfig = {
-            appGroupName: 'YOUR_APP_GROUP_NAME_IDENTIFIER', // App group name
-            screenShareExtensionBundleIdentifier: 'BROADCAST_UPLOAD_EXTENSION_IDENTIFIER', // Screen share extension bundle identifier
-        }
-
         const meetingConfig = {
             meetingId: meetingId,
             meetingPin: password,
@@ -360,6 +347,11 @@ export default function App() {
     primary70: '#338BFF', // Primary 70
   };
 
+  const screenShareConfig = {
+    appGroupName: 'YOUR_APP_GROUP_NAME_IDENTIFIER', // App group name
+    screenShareExtensionBundleIdentifier: 'BROADCAST_UPLOAD_EXTENSION_IDENTIFIER', // Screen share extension bundle identifier
+  }        
+
   return (
     <SafeAreaView style={backgroundStyle.container}>
       <StatusBar
@@ -402,7 +394,7 @@ export default function App() {
             initialAudio: false, // Set the initial audio state
             initialVideo: false, // Set the initial video state
             colorConfig: colorConfig, // Passing color configuration
-            screenShareConfig: screenShareConfig, // Passing screen share configuration
+            screenShareConfig: screenShareConfig, // Passing screen share configuration. Pass this configuration only if we need screenshare support
             isChatCallbackEnabled: true, // Example callback enabled flag
             isParticipantCallbackEnabled: false, // Example callback enabled flag
           };
