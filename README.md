@@ -5,10 +5,14 @@
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Prerequisites](#prerequisites)
-   - [Install package](#install-the-package)
-   - [Hilt](#hilt)
-   - [Android Manifest](#android-manifest-changes-)
-   - [Add credentials](#adding-credentialsproperties-file-in-the-android-folder)
+   - [Android](#android)
+     - [Install package](#install-the-package)
+     - [Android Manifest](#android-manifest-changes)
+     - [Add credentials](#adding-credentialsproperties-file-in-the-android-folder)
+   - [iOS](#ios) 
+     - [Require Configurations](#require-configurations)
+     - [Info.plist Changes](#infoplist-changes)
+     - [Enable Background Mode](#enable-background-mode)
 4. [Setup](#setup)
 5. [Usage](#usage-launch-core-template-screen)
 6. [Example](#example)
@@ -27,12 +31,11 @@ In this Plugin , you'll find a range of powerful features designed to enhance yo
 
 2. **Participant Panel**: Manage and monitor participants in real-time meetings or video calls for a seamless user experience.
 
-3. **Virtual Background**: Customize the background of your video calls, adding a touch of professionalism or fun to your communication.
+3. **Screen Sharing and Whiteboard Sharing**: Empower collaboration by sharing your screen or using a virtual whiteboard during meetings or video conferences.
 
-4. **Screen Sharing and Whiteboard Sharing**: Empower collaboration by sharing your screen or using a virtual whiteboard during meetings or video conferences.
+4. **Group Conversation**: Easily engage in text-based conversations with multiple participants in one chat group.
 
-5. **Group Conversation**: Easily engage in text-based conversations with multiple participants in one chat group.
-6. **Inspect Call Health**: Monitor the quality and performance of your audio and video calls to ensure a seamless communication experience.
+5. **Inspect Call Health**: Monitor the quality and performance of your audio and video calls to ensure a seamless communication experience.
 
 
 ## Prerequisites
@@ -67,85 +70,132 @@ If you're using a React Native version that doesn't automatically link native mo
    npx react-native link @jiomeet/core_sdk_plugin
 ```
 
-#### Hilt:
-
-To set up Hilt in your flutter project, follow these steps:
-
-1. First, add this below line of code to your project’s root build.gradle file (**android/build.gradle**)
-
-```gradle
-  dependencies {
-    ...
-    classpath "com.google.dagger:hilt-android-gradle-plugin:2.44"
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
-  }
-```
-
-2. Add the Hilt dependencies to the app-level build.gradle(**android/app/build.gradle**)
-
-```gradle
-  ...
-  apply plugin: 'kotlin-kapt'
-  apply plugin: 'kotlin-android'
-  apply plugin: 'com.google.dagger.hilt.android'
-
-  ...
-  // Allow references to generated code
-  kapt {
-    correctErrorTypes true
-  }
-
-  dependencies {
-    ...
-    implementation "com.google.dagger:hilt-android:2.44"
-    kapt "com.google.dagger:hilt-android-compiler:2.44"
-  }
-```
-
-3.  Enable Hilt dependency in your Android's MainApplication File. Add this below code in your React Application's android/app/src/main/java/com/'Your Projects name'/MainApplication.java file
-```java
-... other imports
-+ import dagger.hilt.android.HiltAndroidApp;
-
-+ @HiltAndroidApp
-public class MainApplication extends Application implements ReactApplication {
-... Application's code
-```
-#### Android Manifest changes 
+#### Android Manifest changes
 To ensure proper functionality and compatibility of your Android application, please add the following parameters to your `AndroidManifest.xml` file.
-   1. **Open `AndroidManifest.xml`**:
-      - Navigate to the `android/app/src/main` directory of your project.
-      - Open the `AndroidManifest.xml` file.
+1. **Open `AndroidManifest.xml`**:
+- Navigate to the `android/app/src/main` directory of your project.
+- Open the `AndroidManifest.xml` file.
 
-   2. **Add the Following Attributes to `manifest` and `<application>` Tags**:
+2. **Add the Following Attributes to `manifest` and `<application>` Tags**:
 
-      ```xml
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          <!-- Other attributes -->
-          xmlns:tools="http://schemas.android.com/tools">
-      <application
-          <!-- Other attributes -->
-          android:supportsRtl="true"
-          android:usesCleartextTraffic="true"
-          android:requestLegacyExternalStorage="true"
-          tools:replace="android:name">
-          <!-- Other attributes and activities -->
-      </application>
-      
+   ```xml
+   <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+       <!-- Other attributes -->
+       xmlns:tools="http://schemas.android.com/tools">
+   <application
+       <!-- Other attributes -->
+       android:supportsRtl="true"
+       android:usesCleartextTraffic="true"
+       android:requestLegacyExternalStorage="true"
+       tools:replace="android:name">
+       <!-- Other attributes and activities -->
+   </application>
+
 #### Adding `credentials.properties` File in the `android` Folder
 
-To securely add your GitHub credentials, follow these steps to create a `credentials.properties` file in your project's `android` folder and update the build configuration accordingly.
+1. To securely add your GitHub credentials, follow these steps to create a `credentials.properties` file in your project's root directory, the directory containing the package.json file. and update the build configuration accordingly.
 
-##### Create `credentials.properties` File
-
-1. Navigate to the `android` folder in the root of your React Native project.
-2. Create a new file named `credentials.properties`.
-3. Open the `credentials.properties` file and add your GitHub credentials:
+2. Open the `credentials.properties` file and add your GitHub credentials:
 
    ```properties
    github_username=your-github-username
    github_password=your-github-token-or-password
 ---
+
+#### For iOS
+#### Require Configurations
+
+Before getting started with this example app, please ensure you have the following software installed on your machine:
+
+- Xcode 14.2 or later.
+- Swift 5.0 or later.
+- An iOS device or emulator running iOS 13.0 or later.
+
+#### Info.plist Changes
+
+Please add below permissions keys to your `Info.plist` file with proper description.
+
+```swift
+<key>NSCameraUsageDescription</key>
+<string>Allow access to camera for meetings</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Allow access to mic for meetings</string>
+```
+
+#### Enable Background Mode
+
+Please enable `Background Modes` in your project `Signing & Capibilities` tab. After enabling please check box with option `Audio, Airplay, and Pictures in Pictures`. If you don't enables this setting, your mic will be muted when your app goes to background.
+
+#### Screen Share Integration
+
+
+#### Add Broadcast Upload Extension
+
+You need to create a Broadcast Upload Extension to enable the screen sharing process. To do that,
+
+open your example project, go to **Xcode -> File -> Target... ->** 
+
+![create_broadcast_upload_extension](https://storage.googleapis.com/cpass-sdk/assets/screenshots/iOS/screenshare_1.png)
+
+Select **Broadcast Upload Extension** and click on **Next**
+
+![select_broadcast_upload_extension](https://storage.googleapis.com/cpass-sdk/assets/screenshots/iOS/screenshare_2.png)
+
+Fill the **Product name** and other info, uncheck **Include UI Extension**, and click **Finish**.
+
+![broadcast_upload_extension_info](https://storage.googleapis.com/cpass-sdk/assets/screenshots/iOS/screenshare_3.png)
+
+Activate the Extension
+
+![activate_broadcast_upload_extension](https://storage.googleapis.com/cpass-sdk/assets/screenshots/iOS/screenshare_4.png)
+
+Xcode automatically creates the Extension folder, which contains the **SampleHandler.swift** file.
+
+
+**NOTE: Please set deployment target for Broadcast Upload Extension same as of your main app.**
+
+
+#### Add JioMeet Screen Share SDK
+
+Go to your Podfile. Add `JioMeetScreenShareSDK_iOS` pod for your newly created broadcast upload extension and run `pod install --repo-update --verbose` command to install the SDK.
+
+```ruby
+target 'ScreenShareExtension' do
+    use_frameworks!
+    pod 'JioMeetScreenShareSDK_iOS', '4.0.7-temp.1'
+end
+```
+
+**NOTE: `ScreenShareExtension` is name of target you fill while creating `Broadcast Upload Extension`**
+
+
+### Enable App Groups
+
+You need to enable app groups for your main app and screenshare extension. Please follow guide from below link.
+[https://developer.apple.com/documentation/xcode/configuring-app-groups](https://developer.apple.com/documentation/xcode/configuring-app-groups)
+
+[https://www.appcoda.com/app-group-macos-ios-communication/](https://www.appcoda.com/app-group-macos-ios-communication/)
+
+
+#### Edit `SampleHandler` file.
+
+Go to your `SampleHandler.swift` file. Replace the whole file content with content below.
+
+**NOTE: Please change `YOUR_APP_GROUP_NAME_IDENTIFIER` with app group you created in above step.**
+
+```swift
+import ReplayKit
+import JioMeetScreenShareSDK
+
+class SampleHandler: JMScreenShareHandler {
+
+    override func getAppGroupsIdentifier() -> String {
+        return "YOUR_APP_GROUP_NAME_IDENTIFIER"
+    }
+}
+```
+
+
 
 ## Setup
 
@@ -168,149 +218,220 @@ Use the [create meeting api](https://dev.jiomeet.com/docs/JioMeet%20Platform%20S
 
 ### Usage: Launch Core Template Screen
 
-```tsx
+```js
 import { launchMeetingCoreTemplateUI } from '@jiomeet/core_sdk_plugin';
-
 // ...
+         // ...
+        const meetingConfig = {
+            meetingId: meetingId,
+            meetingPin: password,
+            displayName: name,
+            hostToken: '',
+            initialAudio: false, // Set the initial audio state
+            initialVideo: false, // Set the initial video state
+            colorConfig: colorConfig, // Passing color configuration
+            screenShareConfig: screenShareConfig, // Passing screen share configuration to support screen share in iOS (Only required for iOS)
+            isChatCallbackEnabled: true, // Example callback enabled flag
+            isParticipantCallbackEnabled: false, // Example callback enabled flag
+          };
 
-launchMeetingCoreTemplateUI(meetingId, meetingPin, displayName, initialVideo, initialAudio);
+          launchMeetingCoreTemplateUI(meetingConfig);
 ```
 
 To join a meeting, enter meeting details in the function and directly call the function as mentioned above
 
-
-| Parameter     | Type      | Description                                                     |
-|:--------------|:----------|:----------------------------------------------------------------|
-| `meetingId`   | `string`  | **Required**. The meeting ID of the meeting to be joined.       |
-| `meetingPin`  | `string`  | **Required**. The meeting PIN of the meeting to be joined.      |
-| `displayName` | `string`  | **Required**. The display name of the user joining the meeting. |
-| `initialVideo` | `boolean` | **Optional**. Initial state of Video after joining.             |
-| `initialAudio` | `boolean`  | **Optional**. Initial state of Audio after joining.             |
-
-
 ### Receive a callback from SDK
-```tsx
+```js
 import { DeviceEventEmitter } from 'react-native';
 
 // ...
 
 useEffect(() => {
-   DeviceEventEmitter.addListener('call_ended', (message) => {
-      // Handle the message as needed
-   });
-   return ()=>{
-      DeviceEventEmitter.removeAllListeners('call_ended')
-   }
+    if (Platform.OS === 'ios') {
+      CoreSDKManager.addListener('call_ended', (message) => {
+        console.log('Received message from Swift:', message);
+        setCallStatus(message);
+        // Handle the message as needed
+      });
+      CoreSDKManager.addListener('chat_option_clicked', (message) => {
+        console.log('Received message from Swift:', message);
+        setCallStatus(message);
+        // Handle the message as needed
+      });
+    } else {
+      DeviceEventEmitter.addListener('call_ended', (message) => {
+        console.log('Received message from Kotlin:', message);
+        setCallStatus(message);
+        // Handle the message as needed
+      });
+
+      DeviceEventEmitter.addListener('chat_option_clicked', (message) => {
+        console.log('Received message from Kotlin:', message);
+        // setCallStatus(message);
+        // Handle the message as needed
+      });
 }, []);
 ```
-The above callback will be triggered when the Call is ended, you can handle this callback as per your need, the default message that is received is "Call Ended"
+The above callback will be triggered when the Call is ended, you can handle this callback as per your need
 
 ### Example
-```tsx
+```js
 import * as React from 'react';
 
 import {
-   StyleSheet,
-   Button,
-   SafeAreaView,
-   StatusBar,
-   TextInput,
-   useColorScheme,
-   Text,
-   DeviceEventEmitter,
+  StyleSheet,
+  Button,
+  SafeAreaView,
+  StatusBar,
+  TextInput,
+  useColorScheme,
+  Text,
+  DeviceEventEmitter,
+  Platform,
 } from 'react-native';
-import {launchMeetingCoreTemplateUI} from '@jiomeet/core_sdk_plugin';
+import { launchMeetingCoreTemplateUI } from '@jiomeet/core_sdk_plugin';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useEffect, useState } from 'react';
+import CoreSDKManager from '@jiomeet/core_sdk_plugin';
 
 export default function App() {
-   const isDarkMode = useColorScheme() === 'dark';
-   const [meetingId, setMeetingId] = useState('');
-   const [password, setPassword] = useState('');
-   const [name, setName] = useState('');
-   const [callStatus, setCallStatus] = useState('Not Started');
+  const isDarkMode = useColorScheme() === 'dark';
+  const [meetingId, setMeetingId] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [callStatus, setCallStatus] = useState('Not Started');
 
-   const backgroundStyle = StyleSheet.create({
-      container: {
-         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-         justifyContent: 'center',
-         alignItems: 'center',
-         flex: 1,
-      },
-   });
+  const backgroundStyle = StyleSheet.create({
+    container: {
+      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+    },
+  });
 
-
-   useEffect(() => {
-      DeviceEventEmitter.addListener('call_ended', (message) => {
-         console.log('Received message from Kotlin:', message);
-         setCallStatus(message);
-         // Handle the message as needed
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      CoreSDKManager.addListener('call_ended', (message) => {
+        console.log('Received message from Swift:', message);
+        setCallStatus(message);
+        // Handle the message as needed
       });
-      return ()=>{
-         DeviceEventEmitter.removeAllListeners('call_ended')
-      }
-   }, []);
-   return (
-           <SafeAreaView style={backgroundStyle.container}>
-              <StatusBar
-                      barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                      backgroundColor={backgroundStyle.container.backgroundColor}
-              />
-              <TextInput
-                      value={meetingId}
-                      onChange={()=>setCallStatus('Not Started')}
-                      style={styles.textInput}
-                      placeholder={'Meeting ID'}
-                      onChangeText={setMeetingId}
-                      inputMode={'numeric'}
-              />
-              <TextInput
-                      value={password}
-                      onChange={()=>setCallStatus('Not Started')}
-                      style={styles.textInput}
-                      placeholder={'Password'}
-                      onChangeText={setPassword}
-              />
-              <TextInput
-                      value={name}
-                      onChange={()=>setCallStatus('Not Started')}
-                      style={styles.textInput}
-                      placeholder={'Name Visible'}
-                      onChangeText={setName}
-              />
-              <Button
-                      disabled={
-                              name.length < 3 || meetingId.length < 9 || password.length < 5
-                      }
-                      title={'Join Call'}
-                      onPress={() => {
-                         launchMeetingCoreTemplateUI(meetingId, password, name);
-                      }}
-              />
-              <Text style={{margin: 16}}>Call status: {callStatus}</Text>
-           </SafeAreaView>
-   );
+      CoreSDKManager.addListener('chat_option_clicked', (message) => {
+        console.log('Received message from Swift:', message);
+        setCallStatus(message);
+        // Handle the message as needed
+      });
+    } else {
+      DeviceEventEmitter.addListener('call_ended', (message) => {
+        console.log('Received message from Kotlin:', message);
+        setCallStatus(message);
+        // Handle the message as needed
+      });
+
+      DeviceEventEmitter.addListener('chat_option_clicked', (message) => {
+        console.log('Received message from Kotlin:', message);
+        // setCallStatus(message);
+        // Handle the message as needed
+      });
+    }
+
+
+    return () => {
+      CoreSDKManager.removeAllListeners('call_ended');
+      CoreSDKManager.removeAllListeners('chat_option_clicked');
+
+      DeviceEventEmitter.removeAllListeners('call_ended');
+      DeviceEventEmitter.removeAllListeners('chat_option_clicked');
+    };
+  }, []);
+
+  const colorConfig = {
+    primary: '#0062FF', // Primary color
+    primaryDark50: '#0041CC', // Primary Dark 50
+    primary70: '#338BFF', // Primary 70
+  };
+
+  const screenShareConfig = {
+    appGroupName: 'YOUR_APP_GROUP_NAME_IDENTIFIER', // App group name
+    screenShareExtensionBundleIdentifier: 'BROADCAST_UPLOAD_EXTENSION_IDENTIFIER', // Screen share extension bundle identifier
+  }        
+
+  return (
+    <SafeAreaView style={backgroundStyle.container}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.container.backgroundColor}
+      />
+      <TextInput
+        value={meetingId}
+        onChange={() => setCallStatus('Not Started')}
+        style={styles.textInput}
+        placeholder={'Meeting ID'}
+        onChangeText={setMeetingId}
+        inputMode={'numeric'}
+      />
+      <TextInput
+        value={password}
+        onChange={() => setCallStatus('Not Started')}
+        style={styles.textInput}
+        placeholder={'Password'}
+        onChangeText={setPassword}
+      />
+      <TextInput
+        value={name}
+        onChange={() => setCallStatus('Not Started')}
+        style={styles.textInput}
+        placeholder={'Name Visible'}
+        onChangeText={setName}
+      />
+      <Button
+        disabled={
+          name.length < 3 || meetingId.length < 9 || password.length < 5
+        }
+        title={'Join Call'}
+        onPress={() => {
+          const meetingConfig = {
+            meetingId: meetingId,
+            meetingPin: password,
+            displayName: name,
+            hostToken: '',
+            initialAudio: false, // Set the initial audio state
+            initialVideo: false, // Set the initial video state
+            colorConfig: colorConfig, // Passing color configuration
+            screenShareConfig: screenShareConfig, // Passing screen share configuration. Pass this configuration only if we need screenshare support
+            isChatCallbackEnabled: true, // Example callback enabled flag
+            isParticipantCallbackEnabled: false, // Example callback enabled flag
+          };
+
+          launchMeetingCoreTemplateUI(meetingConfig);
+        }}
+      />
+      {/* eslint-disable-next-line react-native/no-inline-styles */}
+      <Text style={{ margin: 16 }}>Call status: {callStatus}</Text>
+    </SafeAreaView>
+  );
 }
 
-
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-   },
-   box: {
-      width: 60,
-      height: 60,
-      marginVertical: 20,
-   },
-   textInput: {
-      padding: 16,
-      margin: 16,
-      backgroundColor: '#FCE6E7',
-      borderRadius: 8,
-      alignSelf: 'stretch',
-   },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    width: 60,
+    height: 60,
+    marginVertical: 20,
+  },
+  textInput: {
+    padding: 16,
+    margin: 16,
+    backgroundColor: '#FCE6E7',
+    borderRadius: 8,
+    alignSelf: 'stretch',
+    color: 'black',
+  },
 });
 
 ```
