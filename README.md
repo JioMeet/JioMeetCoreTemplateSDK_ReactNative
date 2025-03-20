@@ -161,6 +161,11 @@ Create a new app. Please follow the steps provided in the [Documentation guide](
 
 Use the [create meeting api](https://dev.jiomeet.com/docs/JioMeet%20Platform%20Server%20APIs/create-a-dynamic-meeting) to get your room id and password
 
+### Usage: Set Environment
+```js
+ setEnvironment('PROD') //RC, PROD, PRESTAGE
+```
+
 ### Usage: Launch Core Template Screen
 
 ```tsx
